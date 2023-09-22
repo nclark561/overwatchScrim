@@ -1,12 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import * as bcrypt from "bcryptjs";
-
-const salt = bcrypt.genSaltSync(10);
+import bcrypt from "bcryptjs";
 
 const main = async () => {
+  const salt = bcrypt.genSaltSync(10);
+
   const travis = await prisma.user.upsert({
-    where: { username: "travis" },
+    where: { username: 'travis' },
     update: {},
     create: {
       username: "travis",
@@ -41,6 +41,7 @@ const main = async () => {
       },
     },
   });
+  console.log({ travis, pig, phantom })
 };
 
 main()
