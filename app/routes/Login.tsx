@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Form, useActionData } from "@remix-run/react";
 import { ActionFunction } from "@remix-run/node";
-import { login } from "~/utils/sessions.server";
+import { login, createUserSession } from "~/utils/sessions.server";
 
 type ActionData = {
   formError?: string;
@@ -19,12 +19,16 @@ type ActionData = {
 
 export const action: ActionFunction = async ({
   request,
-}) /*: Promise<Response | ActionData>*/ => {
+}) : Promise<Response | ActionData> => {
   let form = await request.formData();
   let loginType = form.get("loginType");
   let username = form.get("username");
   let password = form.get("password");
   let repass = form.get("repass");
+
+  if (!repass) {
+    repass = ''
+  }
 
   if (
     typeof loginType !== "string" ||
@@ -38,12 +42,16 @@ export const action: ActionFunction = async ({
   let fields = { loginType, username, password, repass };
   switch (loginType) {
     case "login":
-      console.log(form.get("username"), form.get("password"));
       const user = await login({ username, password });
-      return fields;
+      console.log(user)
+      if (!user) {
+        console.log('failure to login')
+        return { fields, formError: "incorrect username or password"}
+      }
+      return createUserSession(user.id, '/');
     case "register":
       console.log(username, password, repass);
-      return fields;
+      return { fields };
     default:
       return { formError: "login type invalid" };
   }
