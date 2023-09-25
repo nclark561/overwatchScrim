@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { ActionFunction } from "@remix-run/node";
-import { login, createUserSession } from "~/utils/sessions.server";
+import { login, createUserSession, register } from "~/utils/sessions.server";
+import { PrismaClient } from "@prisma/client";
 
 type ActionData = {
   formError?: string;
@@ -19,13 +20,15 @@ type ActionData = {
 
 export const action: ActionFunction = async ({
   request,
-}) : Promise<Response | ActionData> => {
+}): Promise<Response | ActionData> => {
   let form = await request.formData();
   let loginType = form.get("loginType");
   let username = form.get("username");
   let password = form.get("password");
-  let repass = form.get("repass") || '';
-  let redirectTo = form.get("redirectTo") || '/';
+  let repass = form.get("repass") || "";
+  let redirectTo = form.get("redirectTo") || "/";
+
+  const prisma = new PrismaClient();
 
   if (
     typeof loginType !== "string" ||
@@ -41,15 +44,20 @@ export const action: ActionFunction = async ({
   switch (loginType) {
     case "login":
       const user = await login({ username, password });
-      console.log(user)
+      console.log(user);
       if (!user) {
-        console.log('failure to login')
-        return { fields, formError: "incorrect username or password"}
+        console.log("failure to login");
+        return { fields, formError: "incorrect username or password" };
       }
       return createUserSession(user.id, redirectTo);
     case "register":
-      console.log(username, password, repass);
-      return { fields };
+      if (password !== repass) return { formError: "password confirmation does not match" };
+      const userAlready = await prisma.user.findUnique({ where: { username } });
+      await prisma.$disconnect();
+      if (userAlready) return { formError: "user already exists" };
+      const newUser = await register(username, password);
+      if (!newUser) return { fields, formError: "error creating account" };
+      return createUserSession(newUser.id, redirectTo);
     default:
       return { formError: "login type invalid" };
   }
@@ -58,7 +66,7 @@ export const action: ActionFunction = async ({
 export default function Login() {
   const [register, setRegister] = useState(false);
   const actionData = useActionData<ActionData | undefined>();
-  const [searchParams] = useSearchParams()
+  const [searchParams] = useSearchParams();
   const handleClick = (evt: React.SyntheticEvent) => {
     evt.preventDefault();
     setRegister((prev) => !prev);

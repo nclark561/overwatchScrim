@@ -37,6 +37,29 @@ export async function login({
   return user;
 }
 
+export async function register(username: string, password: string) {
+  const hash = await bcrypt.hash(password, 10)
+  let newUser
+  try {
+    newUser = await prisma.user.create({
+      data: { 
+        username,
+        password: {
+          create: {
+            hash
+          }
+        }
+       }
+    })
+    prisma.$disconnect()
+  } catch (err) {
+    console.error(err)
+    prisma.$disconnect()
+    process.exit(1)
+  }
+  return newUser
+}
+
 const { SESSION_SECRET } = process.env;
 if (!SESSION_SECRET) throw new Error("SESSION_SECRET is not set");
 
