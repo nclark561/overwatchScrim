@@ -44,6 +44,7 @@ const storage = createCookieSessionStorage({
   cookie: {
     name: "OW_SESSION",
     maxAge: 1000 * 60 * 60 * 24 * 7,
+    secrets: [SESSION_SECRET],
     secure: true,
     httpOnly: true,
     path: "/",
@@ -66,9 +67,6 @@ export async function requireUserId(
 ) {
   const session = await storage.getSession(request.headers.get("Cookie"))
   const userId = session.get('userId')
-  if(!userId) {
-    const searchParams = new URLSearchParams([["redirectTo", redirectTo]])
-    return redirect(`/login?${searchParams}`)
-  }
-  return userId
+  if(!userId || typeof userId !== "string" ) return { userId: null, redirectTo}
+  return { userId, redirectTo }
 }

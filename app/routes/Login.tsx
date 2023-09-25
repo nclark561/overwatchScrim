@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { ActionFunction } from "@remix-run/node";
 import { login, createUserSession } from "~/utils/sessions.server";
 
@@ -24,17 +24,15 @@ export const action: ActionFunction = async ({
   let loginType = form.get("loginType");
   let username = form.get("username");
   let password = form.get("password");
-  let repass = form.get("repass");
-
-  if (!repass) {
-    repass = ''
-  }
+  let repass = form.get("repass") || '';
+  let redirectTo = form.get("redirectTo") || '/';
 
   if (
     typeof loginType !== "string" ||
     typeof username !== "string" ||
     typeof password !== "string" ||
-    typeof repass !== "string"
+    typeof repass !== "string" ||
+    typeof redirectTo !== "string"
   ) {
     return { formError: `Form not submitted correctly.` };
   }
@@ -48,7 +46,7 @@ export const action: ActionFunction = async ({
         console.log('failure to login')
         return { fields, formError: "incorrect username or password"}
       }
-      return createUserSession(user.id, '/');
+      return createUserSession(user.id, redirectTo);
     case "register":
       console.log(username, password, repass);
       return { fields };
@@ -60,6 +58,7 @@ export const action: ActionFunction = async ({
 export default function Login() {
   const [register, setRegister] = useState(false);
   const actionData = useActionData<ActionData | undefined>();
+  const [searchParams] = useSearchParams()
   const handleClick = (evt: React.SyntheticEvent) => {
     evt.preventDefault();
     setRegister((prev) => !prev);
@@ -97,6 +96,11 @@ export default function Login() {
           type="hidden"
           name="loginType"
           value={register ? "register" : "login"}
+        />
+        <input
+          type="hidden"
+          name="redirectTo"
+          value={searchParams.get("redirectTo") ?? undefined}
         />
         <button onClick={handleClick}>
           {register

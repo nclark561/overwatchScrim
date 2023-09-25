@@ -1,9 +1,13 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { requireUserId } from "~/utils/sessions.server";
 import { useLoaderData } from "@remix-run/react";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userId = await requireUserId(request);
+  const { userId, redirectTo }  = await requireUserId(request);
+  if (!userId) {
+    const params = new URLSearchParams([["redirectTo", redirectTo]])
+    return redirect(`/login?${params}`)
+  }
   return { userId };
 };
 
