@@ -1,0 +1,36 @@
+.trigger {
+  border: 2px solid #000000;
+  border-radius: 10px;
+  height: 35px;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.bars {
+  width: 30px;
+  cursor: pointer;
+}
+.bars .line {
+  fill: none;
+  stroke: #000000;
+  stroke-width: 4;
+  stroke-linecap: square;
+  transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
+}
+.bars .line.top {
+  stroke-dasharray: 40 172;
+}
+.bars .line.middle {
+  stroke-dasharray: 40 111;
+}
+.bars .line.bottom {
+  stroke-dasharray: 40 172;
+}
+.bars.active .top {
+  stroke-dashoffset: -132px;
+}
+.bars.active .middle {
+  stroke-dashoffset: -71px;
+}
+.bars.active .bottom {
+  stroke-dashoffset: -132px;
+}
