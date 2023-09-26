@@ -1,6 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import MenuButton from "~/components/MenuButton";
+import styles from '~/styles/_index.module.css'
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,7 +23,7 @@ export default function Index() {
         <Link to="/AuthTest" className="mx-[1rem]">
           test
         </Link>
-        <h1 className="m-[1rem] text-[32pt]">Scrims Overwatch</h1>
+        <h1 className={`m-[1rem] text-[32pt] ${styles.title}`}>crm Overwatch</h1>
         <MenuButton/>
       </header>
     </div>

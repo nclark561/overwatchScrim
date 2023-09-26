@@ -34,3 +34,12 @@
 .bars.active .bottom {
   stroke-dashoffset: -132px;
 }
+
+@font-face {
+  font-family: 'overwatch';
+  src: url('./fonts/overwatch.ttf');
+}
+
+.title {
+  font-family: 'overwatch';
+}
