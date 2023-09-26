@@ -1,6 +1,6 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import MenuButton from "~/components/MenuButton";
+import MenuButton from "~/components/buttons/MenuButton";
 import styles from '~/styles/_index.module.css'
 
 export const meta: MetaFunction = () => {

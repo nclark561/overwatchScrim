@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
-import { ActionFunction } from "@remix-run/node";
+import { ActionFunction, MetaFunction } from "@remix-run/node";
 import { login, createUserSession, register } from "~/utils/sessions.server";
 import { PrismaClient } from "@prisma/client";
 
@@ -16,6 +16,16 @@ type ActionData = {
     password: string;
     repass: string;
   };
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Scrims Overwatch" },
+    {
+      name: "description",
+      content: "Login to start your matches!",
+    },
+  ];
 };
 
 export const action: ActionFunction = async ({
