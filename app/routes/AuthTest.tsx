@@ -15,7 +15,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { userId, redirectTo }  = await requireUserId(request);
+  const { userId }  = await requireUserId(request);
   if (!userId) {
     return null
   }

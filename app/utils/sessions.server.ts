@@ -85,13 +85,12 @@ export async function createUserSession(userId: string, redirectTo: string) {
 }
 
 export async function requireUserId(
-  request: Request,
-  redirectTo: string = new URL(request.url).pathname
+  request: Request
 ) {
   const session = await storage.getSession(request.headers.get("Cookie"))
   const userId = session.get('userId')
-  if(!userId || typeof userId !== "string" ) return { userId: null, redirectTo}
-  return { userId, redirectTo }
+  if(!userId || typeof userId !== "string" ) return { userId: null }
+  return { userId }
 }
 
 export async function logout (request: Request) {
