@@ -22,15 +22,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   return { userId };
 };
 
-export const action: ActionFunction = ({ request }) => {
-  const redirectTo = new URL(request.url).pathname
-  const params = new URLSearchParams([["redirectTo", redirectTo]])
-  return redirect(`/login?${params}`)
-}
-
 export default function AuthTest() {
   const loaderData = useLoaderData<Promise<any> | undefined>();
-  console.log(loaderData);
 
   return loaderData?.userId ? <LogoutButton/> : <AuthReq/>;
 }

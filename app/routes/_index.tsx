@@ -20,7 +20,7 @@ export default function Index() {
       style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}
     >
       <header className="flex justify-between items-center w-[100vw]">
-        <Link to="/AuthTest" className="mx-[1rem]">
+        <Link to="/AuthTest" className="mx-[1rem]" prefetch="intent">
           test
         </Link>
         <h1 className={`m-[1rem] text-[32pt] ${styles.title}`}>crm Overwatch</h1>
