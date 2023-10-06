@@ -2,7 +2,7 @@ import styles from "~/styles/_index.module.css";
 
 export default function MenuButton() {
   return (
-    <div className={styles.trigger}>
+    <div className={`ml-auto ${styles.trigger} hover:bg-gray-300`}>
       <svg className={styles.bars} viewBox="0 0 100 100">
         <path
           className={`${styles.line} ${styles.top}`}

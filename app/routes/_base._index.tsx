@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import MenuButton from "~/components/buttons/MenuButton";
-import styles from '~/styles/_index.module.css'
+import styles from "~/styles/_index.module.css";
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,13 +19,9 @@ export default function Index() {
       className="flex justify-center items-center w-[100vw]"
       style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}
     >
-      <header className="flex justify-between items-center w-[100vw]">
-        <Link to="/AuthTest" className="mx-[1rem]" prefetch="intent">
-          test
-        </Link>
-        <h1 className={`m-[1rem] text-[32pt] ${styles.title}`}>crm Overwatch</h1>
-        <MenuButton/>
-      </header>
+      <Link to="/AuthTest" className="mx-[1rem]" prefetch="intent">
+        test
+      </Link>
     </div>
   );
 }
